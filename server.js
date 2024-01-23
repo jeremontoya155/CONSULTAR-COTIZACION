@@ -2,8 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
-const accessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwNjAwOTI2OCwianRpIjoiNDhkOGI2OTgtYjUyYi00ODU3LTliNGQtNDQ0YjczNTgzYzIwIiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjozOTEsIm5iZiI6MTcwNjAwOTI2OCwiZXhwIjoxNzA2MDEyODY4LCJyb2xlcyI6W3siaWQiOjExLCJuYW1lIjoiMGttIn0seyJpZCI6MTksIm5hbWUiOiJEZXNhcnJvbGxvIn0seyJpZCI6MTAsIm5hbWUiOiJFeHRyYXMifSx7ImlkIjo5LCJuYW1lIjoiTW9kZWxvcyJ9LHsiaWQiOjEyLCJuYW1lIjoiVXNhZG9zIn1dfQ.s_2gyuwlzcTLrKqml0_0SbyjPGGez2yT2KRsAUOFNtY'
-
+const ACCESSTOKEN ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwNjAwOTI2OCwianRpIjoiNDhkOGI2OTgtYjUyYi00ODU3LTliNGQtNDQ0YjczNTgzYzIwIiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjozOTEsIm5iZiI6MTcwNjAwOTI2OCwiZXhwIjoxNzA2MDEyODY4LCJyb2xlcyI6W3siaWQiOjExLCJuYW1lIjoiMGttIn0seyJpZCI6MTksIm5hbWUiOiJEZXNhcnJvbGxvIn0seyJpZCI6MTAsIm5hbWUiOiJFeHRyYXMifSx7ImlkIjo5LCJuYW1lIjoiTW9kZWxvcyJ9LHsiaWQiOjEyLCJuYW1lIjoiVXNhZG9zIn1dfQ.s_2gyuwlzcTLrKqml0_0SbyjPGGez2yT2KRsAUOFNtY'
 const app = express();
 
 const PORT =process.env.PORT
@@ -21,7 +20,7 @@ app.get('/obtener-marcas', async (req, res) => {
   try {
     const apiUrl = 'https://api.infoauto.com.ar/cars/pub/';
 
-    const allData = await obtenerTodasLasMarcas(apiUrl, accessToken);
+    const allData = await obtenerTodasLasMarcas(apiUrl, ACCESSTOKEN);
 
     console.log('Marcas obtenidas:', allData.length);
 
@@ -39,7 +38,7 @@ app.get('/obtener-grupos/:brandId', async (req, res) => {
 
     const brandId = req.params.brandId;
 
-    const allData = await obtenerTodosLosGrupos(apiUrl, accessToken, brandId);
+    const allData = await obtenerTodosLosGrupos(apiUrl, ACCESSTOKEN, brandId);
 
     console.log(`Grupos obtenidos para la marca con ID ${brandId}:`, allData);
 
@@ -58,7 +57,7 @@ app.get('/obtener-modelos/:brandId/:groupId', async (req, res) => {
     const brandId = req.params.brandId;
     const groupId = req.params.groupId;
 
-    const allData = await obtenerTodosLosModelos(apiUrl, accessToken, brandId, groupId);
+    const allData = await obtenerTodosLosModelos(apiUrl, ACCESSTOKEN, brandId, groupId);
 
     console.log(`Modelos obtenidos para la marca con ID ${brandId} y grupo con ID ${groupId}:`, allData);
 
@@ -76,7 +75,7 @@ app.get('/obtener-precios/:codia', async (req, res) => {
 
     const codia = req.params.codia;
 
-    const allData = await obtenerTodosLosPrecios(apiUrl, accessToken, codia);
+    const allData = await obtenerTodosLosPrecios(apiUrl, ACCESSTOKEN, codia);
 
     console.log(`Precios obtenidos para el modelo con CODIA ${codia}:`, allData);
 
@@ -87,7 +86,7 @@ app.get('/obtener-precios/:codia', async (req, res) => {
   }
 });
 
-async function obtenerTodasLasMarcas(apiUrl, accessToken) {
+async function obtenerTodasLasMarcas(apiUrl, ACCESSTOKEN) {
   let allData = [];
   let page = 1;
   let totalPages = 1;
@@ -97,7 +96,7 @@ async function obtenerTodasLasMarcas(apiUrl, accessToken) {
     try {
       const response = await axios.get(`${apiUrl}/brands?page=${page}`, {
         headers: {
-          'Authorization': `Bearer ${accessToken}`
+          'Authorization': `Bearer ${ACCESSTOKEN}`
         }
       });
 
@@ -131,7 +130,7 @@ async function obtenerTodasLasMarcas(apiUrl, accessToken) {
   return allData;
 }
 
-async function obtenerTodosLosGrupos(apiUrl, accessToken, brandId) {
+async function obtenerTodosLosGrupos(apiUrl, ACCESSTOKEN, brandId) {
   let allData = [];
   let page = 1;
   let totalPages = 1;
@@ -141,7 +140,7 @@ async function obtenerTodosLosGrupos(apiUrl, accessToken, brandId) {
     try {
       const response = await axios.get(`${apiUrl}/brands/${brandId}/groups?page=${page}`, {
         headers: {
-          'Authorization': `Bearer ${accessToken}`
+          'Authorization': `Bearer ${ACCESSTOKEN}`
         }
       });
 
@@ -175,7 +174,7 @@ async function obtenerTodosLosGrupos(apiUrl, accessToken, brandId) {
   return allData;
 }
 
-async function obtenerTodosLosModelos(apiUrl, accessToken, brandId, groupId) {
+async function obtenerTodosLosModelos(apiUrl, ACCESSTOKEN, brandId, groupId) {
   let allData = [];
   let page = 1;
   let totalPages = 1;
@@ -185,7 +184,7 @@ async function obtenerTodosLosModelos(apiUrl, accessToken, brandId, groupId) {
     try {
       const response = await axios.get(`${apiUrl}/brands/${brandId}/groups/${groupId}/models?page=${page}`, {
         headers: {
-          'Authorization': `Bearer ${accessToken}`
+          'Authorization': `Bearer ${ACCESSTOKEN}`
         }
       });
 
@@ -219,11 +218,11 @@ async function obtenerTodosLosModelos(apiUrl, accessToken, brandId, groupId) {
   return allData;
 }
 
-async function obtenerTodosLosPrecios(apiUrl, accessToken, codia) {
+async function obtenerTodosLosPrecios(apiUrl, ACCESSTOKEN, codia) {
   try {
     const response = await axios.get(`${apiUrl}/models/${codia}/prices`, {
       headers: {
-        'Authorization': `Bearer ${accessToken}`
+        'Authorization': `Bearer ${ACCESSTOKEN}`
       }
     });
 
