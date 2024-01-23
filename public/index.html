@@ -4,28 +4,110 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Buscar Modelos</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <style>
+
+    
+  body {
+  background-color: rgba(255, 165, 0, 0.1); /* Fondo naranja muy transparente */
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.container {
+  max-width: 800px; /* Ajusta el ancho del contenido según tus necesidades */
+  width: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+h1 {
+  text-align: center;
+}
+
+label,
+button {
+  display: block;
+  margin-bottom: 10px;
+}
+
+select{
+  margin-bottom: 1em;
+}
+
+select,
+button {
+  font-size: 16px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+
+button {
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+  </style>
 </head>
 <body>
 
-<h1>Buscar Modelos</h1>
 
+
+  <div class="container">
+    <h1>Buscar Modelos</h1>
 <!-- Botón para consultar todas las marcas -->
 <button onclick="consultarTodasLasMarcas()">Consultar Todas las Marcas</button>
 
 <!-- Lista desplegable para seleccionar la marca -->
-<label for="brandDropdown">Selecciona la Marca:</label>
+
 <select id="brandDropdown" onchange="cambiarMarca()">
   <option value="">Seleccione una marca</option>
   <!-- Las opciones se llenarán dinámicamente con JavaScript -->
 </select>
 
 <!-- Lista desplegable para seleccionar el grupo -->
-<label for="groupDropdown">Selecciona el Grupo:</label>
+
 <select id="groupDropdown">
+  <option value="">Seleccione un modelo</option>
   <!-- Las opciones se llenarán dinámicamente con JavaScript -->
 </select>
 
 <button onclick="buscarModelos()">Buscar Modelos</button>
+  </div>
+
+<div class="container">
+  
+  
 
 <!-- Tabla para mostrar modelos -->
 <table id="modelos-table">
@@ -42,7 +124,7 @@
 </table>
 
 <!-- Tabla para mostrar precios -->
-<table id="precios-table">
+<!-- <table id="precios-table">
   <thead>
     <tr>
       <th>Año</th>
@@ -50,9 +132,9 @@
     </tr>
   </thead>
   <tbody>
-    <!-- Las filas se llenarán dinámicamente con JavaScript -->
+    Las filas se llenarán dinámicamente con JavaScript
   </tbody>
-</table>
+</table></div> --> </div>
 
 <script>
   function consultarTodasLasMarcas() {
@@ -166,7 +248,7 @@
     }
   }
 
-  async function verPrecios(codia) {
+  /*async function verPrecios(codia) {
     const apiUrlPrecios = `/obtener-precios/${codia}`;
 
     try {
@@ -184,6 +266,44 @@
         row.insertCell(0).textContent = precio.year;
         row.insertCell(1).textContent = precio.price;
       });
+    } catch (error) {
+      console.error('Error al cargar los precios:', error);
+      // Manejar el error según tus necesidades
+    }
+  }*/
+  async function verPrecios(codia) {
+    const apiUrlPrecios = `/obtener-precios/${codia}`;
+
+    try {
+      const response = await fetch(apiUrlPrecios);
+      const data = await response.json();
+
+      console.log('Precios obtenidos:', data.precios);
+
+      // Construir un array de objetos para SweetAlert2
+      const preciosOptions = data.precios.map(precio => ({
+        text: `${precio.year} - ${precio.price}`,
+        value: precio.year
+      }));
+
+      // Mostrar SweetAlert2 con un desplegable
+      const { value: selectedYear } = await Swal.fire({
+        title: 'Selecciona un año para ver el precio',
+        input: 'select',
+        inputOptions: preciosOptions,
+        inputPlaceholder: 'Seleccione un año',
+        showCancelButton: true,
+      });
+
+      // Verificar si se seleccionó un año
+      if (selectedYear) {
+        // Aquí puedes realizar cualquier acción adicional con el año seleccionado
+        Swal.fire({
+          title: `Precio para el año ${selectedYear}`,
+          text: `El precio es: ${data.precios.find(precio => precio.year === selectedYear).price}`,
+          icon: 'info'
+        });
+      }
     } catch (error) {
       console.error('Error al cargar los precios:', error);
       // Manejar el error según tus necesidades
