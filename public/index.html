@@ -20,10 +20,14 @@
 }
 
 .container {
-  max-width: 800px; /* Ajusta el ancho del contenido según tus necesidades */
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
+  max-height: 80vh; /* Cambié el porcentaje a viewport height (vh) */
+    overflow-y: auto; /* Añadí el scroll vertical si es necesario */
+    scroll-behavior: auto;
+    max-width: 800px;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-bottom: 2em;
 }
 
 h1 {
