@@ -1,47 +1,11 @@
-const axios = require('axios');
-require('dotenv').config();
-//const REFRESH_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwNjAyNDM2OSwianRpIjoiYjk4OGE3OTQtYTExNi00ODM2LWI1ZTItMjNkOTliMDlhZjA5IiwidHlwZSI6InJlZnJlc2giLCJpZGVudGl0eSI6MzkxLCJuYmYiOjE3MDYwMjQzNjksImV4cCI6MTcwNjExMDc2OSwicm9sZXMiOlt7ImlkIjoxMSwibmFtZSI6IjBrbSJ9LHsiaWQiOjE5LCJuYW1lIjoiRGVzYXJyb2xsbyJ9LHsiaWQiOjEwLCJuYW1lIjoiRXh0cmFzIn0seyJpZCI6OSwibmFtZSI6Ik1vZGVsb3MifSx7ImlkIjoxMiwibmFtZSI6IlVzYWRvcyJ9XX0.4S0zav9cHDmsPaZWQjIq6-IAHbHmdqiCAwm-CBjMAX4"
-
-let ACCESSTOKEN;  // Declara la variable ACCESSTOKEN fuera de la función refreshToken
-
-const refreshToken = async () => {
-  try {
-    const response = await axios.post(
-      'https://api.infoauto.com.ar/cars/auth/refresh',
-      {
-        refresh_token: process.env.REFRESH_TOKEN,
-        client_id: process.env.CLIENT_ID,
-        client_secret: process.env.CLIENT_SECRET,
-      },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${process.env.REFRESH_TOKEN}`,
-        },
-      }
-    );
-
-    // Imprime la respuesta en la consola
-    
-    ACCESSTOKEN = response.data.access_token;
-    console.log('Respuesta del servidor:', response.data);
-  } catch (error) {
-    console.error('Error al hacer la solicitud de carga:', error.message);
-  }
-};
-
-refreshToken();  // Asegúrate de que esta llamada se complete correctamente antes de continuar.
-
-
-// Resto del código
 require('dotenv').config()
 const express = require('express');
+const axios = require('axios');
 const cors = require('cors');
-// Elimina la línea donde inicializas ACCESSTOKEN, ya que ahora se obtendrá con refreshToken
-
+const ACCESSTOKEN ='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwNjAzMDg0OCwianRpIjoiNjBjZWU4NDQtZTIzYS00YzgzLTk0ZTctY2U2YjQ2M2ZiMTY3IiwidHlwZSI6ImFjY2VzcyIsImlkZW50aXR5IjozOTEsIm5iZiI6MTcwNjAzMDg0OCwiZXhwIjoxNzA2MDM0NDQ4LCJyb2xlcyI6W3siaWQiOjExLCJuYW1lIjoiMGttIn0seyJpZCI6MTksIm5hbWUiOiJEZXNhcnJvbGxvIn0seyJpZCI6MTAsIm5hbWUiOiJFeHRyYXMifSx7ImlkIjo5LCJuYW1lIjoiTW9kZWxvcyJ9LHsiaWQiOjEyLCJuYW1lIjoiVXNhZG9zIn1dfQ.x1ZD2GW-GhFXMnGp9UyTFi42-hiwHQovQUdzdQ_tF9k'
 const app = express();
 
-const PORT = process.env.PORT;
+const PORT =process.env.PORT
 
 //Agregamos cambios al access token
 app.use(cors());
