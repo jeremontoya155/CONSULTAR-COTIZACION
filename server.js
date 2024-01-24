@@ -24,7 +24,6 @@ const refreshToken = async () => {
     // Imprime la respuesta en la consola
     
     ACCESSTOKEN = response.data.access_token;
-    console.log('Respuesta del servidor:', response.data);
   } catch (error) {
     console.error('Error al hacer la solicitud de carga:', error.message);
   }
@@ -52,13 +51,13 @@ app.get('/', (req, res) => {
 });
 
 app.get('/obtener-marcas', async (req, res) => {
-  console.log('Recibida solicitud para obtener marcas');
+ 
   try {
     const apiUrl = 'https://api.infoauto.com.ar/cars/pub/';
 
     const allData = await obtenerTodasLasMarcas(apiUrl, ACCESSTOKEN);
 
-    console.log('Marcas obtenidas:', allData.length);
+   
 
     res.json({ marcas: allData });
   } catch (error) {
@@ -68,7 +67,7 @@ app.get('/obtener-marcas', async (req, res) => {
 });
 
 app.get('/obtener-grupos/:brandId', async (req, res) => {
-  console.log(`Recibida solicitud para obtener grupos de la marca con ID ${req.params.brandId}`);
+  
   try {
     const apiUrl = 'https://api.infoauto.com.ar/cars/pub/';
 
@@ -86,7 +85,7 @@ app.get('/obtener-grupos/:brandId', async (req, res) => {
 });
 
 app.get('/obtener-modelos/:brandId/:groupId', async (req, res) => {
-  console.log(`Recibida solicitud para obtener modelos de la marca con ID ${req.params.brandId} y grupo con ID ${req.params.groupId}`);
+ 
   try {
     const apiUrl = 'https://api.infoauto.com.ar/cars/pub/';
 
@@ -95,7 +94,7 @@ app.get('/obtener-modelos/:brandId/:groupId', async (req, res) => {
 
     const allData = await obtenerTodosLosModelos(apiUrl, ACCESSTOKEN, brandId, groupId);
 
-    console.log(`Modelos obtenidos para la marca con ID ${brandId} y grupo con ID ${groupId}:`, allData);
+    
 
     res.json({ modelos: allData });
   } catch (error) {
@@ -105,7 +104,7 @@ app.get('/obtener-modelos/:brandId/:groupId', async (req, res) => {
 });
 
 app.get('/obtener-precios/:codia', async (req, res) => {
-  console.log(`Recibida solicitud para obtener precios del modelo con CODIA ${req.params.codia}`);
+
   try {
     const apiUrl = 'https://api.infoauto.com.ar/cars/pub/';
 
@@ -113,7 +112,7 @@ app.get('/obtener-precios/:codia', async (req, res) => {
 
     const allData = await obtenerTodosLosPrecios(apiUrl, ACCESSTOKEN, codia);
 
-    console.log(`Precios obtenidos para el modelo con CODIA ${codia}:`, allData);
+    
 
     res.json({ precios: allData });
   } catch (error) {
