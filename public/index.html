@@ -340,43 +340,52 @@
     }
   }*/
   async function verPrecios(codia) {
-    const apiUrlPrecios = `/obtener-precios/${codia}`;
+  const apiUrlPrecios = `/obtener-precios/${codia}`;
 
-    try {
-      const response = await fetch(apiUrlPrecios);
-      const data = await response.json();
+  try {
+    const response = await fetch(apiUrlPrecios);
+    const data = await response.json();
 
-      console.log('Precios obtenidos:', data.precios);
+    console.log('Precios obtenidos:', data.precios);
 
-      // Construir un array de objetos para SweetAlert2
-      const preciosOptions = data.precios.map(precio => ({
-        text: `${precio.year} - ${precio.price}`,
-        value: precio.year
-      }));
+    // Construir un array de objetos para SweetAlert2
+    const preciosOptions = data.precios.map(precio => ({
+      // Este será el valor interno
+      text: `$${precio.price}`, // Este será el valor visualmente mostrado
+      year: precio.year, // Añadir una propiedad year al objeto
+    }));
 
-      // Mostrar SweetAlert2 con un desplegable
-      const { value: selectedYear } = await Swal.fire({
-        title: 'Selecciona un año para ver el precio',
-        input: 'select',
-        inputOptions: preciosOptions,
-        inputPlaceholder: 'Seleccione un año',
-        
+    // Mostrar SweetAlert2 con un desplegable
+    const { value: selectedPrice } = await Swal.fire({
+      title: 'Selecciona un precio para ver el año',
+      input: 'select',
+      inputOptions: preciosOptions.reduce((acc, precio) => {
+        if (!acc[precio.year]) {
+          acc[precio.year] = []; // Inicializar el grupo si no existe
+        }
+        acc[precio.year].push(`${precio.text}`); // Añadir la opción al grupo
+        return acc;
+      }, {}),
+      inputPlaceholder: 'Seleccione un precio',
+    });
+
+    // Verificar si se seleccionó un precio
+    if (selectedPrice) {
+      // Aquí puedes realizar cualquier acción adicional con el precio seleccionado
+      const selectedYear = data.precios.find(precio => precio.price === selectedPrice).year;
+      Swal.fire({
+        title: `Año para el precio $${selectedPrice}`,
+        text: `El año es: ${selectedYear}`,
+        icon: 'info',
       });
-
-      // Verificar si se seleccionó un año
-      if (selectedYear) {
-        // Aquí puedes realizar cualquier acción adicional con el año seleccionado
-        Swal.fire({
-          title: `Precio para el año ${selectedYear}`,
-          text: `El precio es: ${data.precios.find(precio => precio.year === selectedYear).price}`,
-          icon: 'info'
-        });
-      }
-    } catch (error) {
-      console.error('Error al cargar los precios:', error);
-      // Manejar el error según tus necesidades
     }
+  } catch (error) {
+    console.error('Error al cargar los precios:', error);
+    // Manejar el error según tus necesidades
   }
+}
+
+
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
