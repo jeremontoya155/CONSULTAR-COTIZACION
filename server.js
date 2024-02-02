@@ -44,7 +44,19 @@ const loginAndGetToken = async () => {
 };
 
 // Llamada a la función principal
-loginAndGetToken();  // Asegúrate de que esta llamada se complete correctamente antes de continuar.
+let isServerRunning = false;
+
+// Llamada a la función principal
+loginAndGetToken().then(() => {
+  isServerRunning = true;
+
+  // Renovar el token cada 30 minutos (30 minutos * 60 segundos * 1000 milisegundos)
+  setInterval(() => {
+    if (isServerRunning) {
+      loginAndGetToken();
+    }
+  }, 30 * 60 * 1000);
+ // Asegúrate de que esta llamada se complete correctamente antes de continuar.
 
 
 // Resto del código
