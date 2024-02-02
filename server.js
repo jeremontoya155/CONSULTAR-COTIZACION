@@ -55,7 +55,7 @@ loginAndGetToken().then(() => {
     if (isServerRunning) {
       loginAndGetToken();
     }
-  }, 30 * 60 * 1000);
+  }, 30 * 60 * 1000);});
  // Asegúrate de que esta llamada se complete correctamente antes de continuar.
 
 
