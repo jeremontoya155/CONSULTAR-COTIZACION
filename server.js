@@ -44,19 +44,7 @@ const loginAndGetToken = async () => {
 };
 
 // Llamada a la función principal
-let isServerRunning = false;
-
-// Llamada a la función principal
-loginAndGetToken().then(() => {
-  isServerRunning = true;
-
-  // Renovar el token cada 30 minutos (30 minutos * 60 segundos * 1000 milisegundos)
-  setInterval(() => {
-    if (isServerRunning) {
-      loginAndGetToken();
-    }
-  }, 30 * 60 * 1000);});
- // Asegúrate de que esta llamada se complete correctamente antes de continuar.
+loginAndGetToken();  // Asegúrate de que esta llamada se complete correctamente antes de continuar.
 
 
 // Resto del código
@@ -111,7 +99,7 @@ app.get('/obtener-grupos/:brandId', async (req, res) => {
   }
 });
 
-app.get('/obtener-modelos/:brandId/:groupId', async (req, res) => {
+app.get('/obtener-modelos-usados/:brandId/:groupId', async (req, res) => {
  
   try {
     const apiUrl = 'https://api.infoauto.com.ar/cars/pub/';
@@ -130,7 +118,7 @@ app.get('/obtener-modelos/:brandId/:groupId', async (req, res) => {
   }
 });
 
-app.get('/obtener-precios/:codia', async (req, res) => {
+app.get('/obtener-precios-usados/:codia', async (req, res) => {
 
   try {
     const apiUrl = 'https://api.infoauto.com.ar/cars/pub/';
@@ -297,6 +285,109 @@ async function obtenerTodosLosPrecios(apiUrl, ACCESSTOKEN, codia) {
     throw error;
   }
 }
+
+
+/*Agregados 0KM*/ 
+
+
+app.get('/obtener-precios/:codia', async (req, res) => {
+  try {
+    const apiUrl = 'https://api.infoauto.com.ar/cars/pub/';
+    const codia = req.params.codia;
+
+    const listPrice = await obtenerListPrice(apiUrl, ACCESSTOKEN, codia);
+
+    res.json({ list_price: listPrice });
+  } catch (error) {
+    console.error(`Error al obtener el list_price del modelo con CODIA ${req.params.codia}:`, error.message);
+    res.status(500).json({ error: 'Error al obtener el list_price' });
+  }
+});
+
+
+app.get('/obtener-casos/:brandId/:groupId', async (req, res) => {
+ 
+  try {
+    const apiUrl = 'https://api.infoauto.com.ar/cars/pub/';
+
+    const brandId = req.params.brandId;
+    const groupId = req.params.groupId;
+
+    const allData = await obtenerTodosLosModelos0KM(apiUrl, ACCESSTOKEN, brandId, groupId);
+
+    
+
+    res.json({ modelos: allData });
+  } catch (error) {
+    console.error(`Error al obtener los modelos de la marca con ID ${req.params.brandId} y grupo con ID ${req.params.groupId}:`, error.message);
+    res.status(500).json({ error: 'Error al obtener los modelos' });
+  }
+});
+
+async function obtenerListPrice(apiUrl, ACCESSTOKEN, codia) {
+  try {
+    const response = await axios.get(`${apiUrl}/models/${codia}/list_price`, {
+      headers: {
+        'Authorization': `Bearer ${ACCESSTOKEN}`
+      }
+    });
+
+    return response.data.list_price*1000;
+  } catch (error) {
+    console.error(`Error al obtener el list_price del modelo con CODIA ${codia}:`, error.message);
+    throw error;
+  }
+}
+async function obtenerTodosLosModelos0KM(apiUrl, ACCESSTOKEN, brandId, groupId) {
+  let allData = [];
+  let page = 1;
+  let totalPages = 1;
+
+  // Función para obtener datos de una página específica
+  async function obtenerDatosDePagina(page) {
+    try {
+      const response = await axios.get(`${apiUrl}/brands/${brandId}/groups/${groupId}/models?page=${page}`, {
+        headers: {
+          'Authorization': `Bearer ${ACCESSTOKEN}`
+        }
+      });
+
+      // Filtrar modelos cuyo list_price sea mayor a 0
+      const filteredModels = response.data.filter(modelo => modelo.list_price > 0);
+
+      return filteredModels.map(modelo => ({
+        codia: modelo.codia,
+        description: modelo.description
+      }));
+    } catch (error) {
+      console.error(`Error al obtener la página ${page} de modelos:`, error.message);
+      throw error;
+    }
+  }
+
+  // Realizar solicitudes en paralelo usando Promise.all
+  while (page <= totalPages) {
+    const promises = [];
+    for (let i = 0; i < 20; i++) {  // Hasta 20 solicitudes en paralelo
+      promises.push(obtenerDatosDePagina(page));
+      page++;
+    }
+
+    const pagesData = await Promise.all(promises);
+    allData = allData.concat(...pagesData);
+
+    if (page === 1) {
+      // Establecer el número total de páginas en la primera iteración
+      totalPages = pagesData[0].totalPages;
+    }
+  }
+
+  return allData;
+}
+
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
