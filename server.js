@@ -47,6 +47,14 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static('public'));
 app.use(cors());
 
+// Middleware para verificar el token antes de cada solicitud
+app.use((req, res, next) => {
+  if (!ACCESSTOKEN) {
+    return res.status(503).json({ error: 'El token de acceso no está disponible. Intente de nuevo más tarde.' });
+  }
+  next();
+});
+
 // Rutas principales
 app.get('/', (req, res) => {
   res.render('index');
@@ -90,6 +98,9 @@ app.get('/obtener-modelos-usados/:brandId/:groupId', async (req, res) => {
   }
 });
 
+// Ya existente...
+// ...
+
 // Obtener precios usados por CODIA
 app.get('/obtener-precios-usados/:codia', async (req, res) => {
   try {
@@ -103,7 +114,7 @@ app.get('/obtener-precios-usados/:codia', async (req, res) => {
   }
 });
 
-// Obtener list_price por CODIA
+// Obtener list_price por CODIA para modelos 0KM
 app.get('/obtener-precios/:codia', async (req, res) => {
   try {
     const apiUrl = 'https://api.infoauto.com.ar/cars/pub/';
@@ -115,6 +126,8 @@ app.get('/obtener-precios/:codia', async (req, res) => {
     res.status(500).json({ error: 'Error al obtener el list_price' });
   }
 });
+
+// ...
 
 // Obtener modelos 0KM por ID de marca y grupo
 app.get('/obtener-casos/:brandId/:groupId', async (req, res) => {
@@ -164,7 +177,7 @@ async function obtenerTodasLasMarcas(apiUrl, ACCESSTOKEN) {
     const pagesData = await Promise.all(promises);
     allData = allData.concat(...pagesData);
 
-    if (page === 1) {
+    if (page === 1 && pagesData.length > 0) {
       totalPages = pagesData[0].totalPages;
     }
   }
@@ -205,7 +218,7 @@ async function obtenerTodosLosGrupos(apiUrl, ACCESSTOKEN, brandId) {
     const pagesData = await Promise.all(promises);
     allData = allData.concat(...pagesData);
 
-    if (page === 1) {
+    if (page === 1 && pagesData.length > 0) {
       totalPages = pagesData[0].totalPages;
     }
   }
@@ -246,7 +259,7 @@ async function obtenerTodosLosModelos(apiUrl, ACCESSTOKEN, brandId, groupId) {
     const pagesData = await Promise.all(promises);
     allData = allData.concat(...pagesData);
 
-    if (page === 1) {
+    if (page === 1 && pagesData.length > 0) {
       totalPages = pagesData[0].totalPages;
     }
   }
@@ -279,6 +292,10 @@ async function obtenerListPrice(apiUrl, ACCESSTOKEN, codia) {
         'Authorization': `Bearer ${ACCESSTOKEN}`
       }
     });
+
+    if (!response.data || !response.data.list_price) {
+      throw new Error('No se encontró el precio de lista.');
+    }
 
     return response.data.list_price * 1000;
   } catch (error) {
@@ -322,7 +339,7 @@ async function obtenerTodosLosModelos0KM(apiUrl, ACCESSTOKEN, brandId, groupId) 
     const pagesData = await Promise.all(promises);
     allData = allData.concat(...pagesData);
 
-    if (page === 1) {
+    if (page === 1 && pagesData.length > 0) {
       totalPages = pagesData[0].totalPages;
     }
   }
@@ -334,4 +351,3 @@ async function obtenerTodosLosModelos0KM(apiUrl, ACCESSTOKEN, brandId, groupId) 
 app.listen(PORT, () => {
   console.log(`Servidor escuchando en http://localhost:${PORT}`);
 });
-
