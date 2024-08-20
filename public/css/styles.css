@@ -27,7 +27,7 @@ body {
 .logoImg {
   max-width: 6rem;
   height: auto;
-  margin-right: 10px;
+  margin-left: 2em;
   object-fit: cover;
 }
 
@@ -88,7 +88,7 @@ body {
   
   table {
     width: 100%;
-    border-radius:1em;
+    border-radius:.7em;
     border-collapse: collapse;
     margin-top: 20px;
     background-color: white;
@@ -97,11 +97,14 @@ body {
   th, td {
     padding: 12px;
     text-align: left;
-    border: 1px solid #ddd;
   }
   
   th {
+    border-radius:1em;
     background-color: #f2f2f2;
+  }
+  td{
+    border: 1px solid rgb(236, 101, 29,.5);
   }
   
   button {
@@ -128,3 +131,15 @@ body {
     text-align: center;
   }
   
+  .btn-precios{
+    background-color: #ec651d;
+    color:#ededed;
+  }
+  .btn-precios:hover{
+    background-color: rgb(35, 16, 6);
+    color:#fff;
+  }
+
+  .form-control:focus{
+    box-shadow: 0 0 12px #ec651d !important;
+  }
