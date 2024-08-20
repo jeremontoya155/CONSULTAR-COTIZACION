@@ -91,8 +91,8 @@ async function buscarModelosUsados() {
       row.insertCell(1).textContent = modelo.description;
 
       const btnVerPrecios = document.createElement('button');
-      btnVerPrecios.textContent = 'Ver Precios';
-      btnVerPrecios.className = 'btn btn-info';
+      btnVerPrecios.textContent = 'Precios';
+      btnVerPrecios.className = 'btn btn-precios';
       btnVerPrecios.onclick = () => verPreciosUsados(modelo.codia);
       row.insertCell(2).appendChild(btnVerPrecios);
     });
