@@ -2,6 +2,11 @@ const axios = require('axios');
 require('dotenv').config();
 //const REFRESH_TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTcwNjAyNDM2OSwianRpIjoiYjk4OGE3OTQtYTExNi00ODM2LWI1ZTItMjNkOTliMDlhZjA5IiwidHlwZSI6InJlZnJlc2giLCJpZGVudGl0eSI6MzkxLCJuYmYiOjE3MDYwMjQzNjksImV4cCI6MTcwNjExMDc2OSwicm9sZXMiOlt7ImlkIjoxMSwibmFtZSI6IjBrbSJ9LHsiaWQiOjE5LCJuYW1lIjoiRGVzYXJyb2xsbyJ9LHsiaWQiOjEwLCJuYW1lIjoiRXh0cmFzIn0seyJpZCI6OSwibmFtZSI6Ik1vZGVsb3MifSx7ImlkIjoxMiwibmFtZSI6IlVzYWRvcyJ9XX0.4S0zav9cHDmsPaZWQjIq6-IAHbHmdqiCAwm-CBjMAX4"
 
+const path = require('path');
+
+const express = require('express');
+const cors = require('cors');
+// Elimina la línea donde inicializas ACCESSTOKEN, ya que ahora se obtendrá con refreshToken
 const url =process.env.URL ;
 const email =process.env.EMAIL ;
 const password =process.env.PASSWORD ; 
@@ -61,11 +66,6 @@ loginAndGetToken().then(() => {
 // Resto del código // Asegúrate de que esta llamada se complete correctamente antes de continuar.
 
 
-// Resto del código
-require('dotenv').config()
-const express = require('express');
-const cors = require('cors');
-// Elimina la línea donde inicializas ACCESSTOKEN, ya que ahora se obtendrá con refreshToken
 
 const app = express();
 
@@ -75,9 +75,6 @@ const PORT = process.env.PORT;
 app.use(cors());
 app.use(express.static('public'));
 
-app.get('/', (req, res) => {
-  res.sendFile(__dirname + '/public/index.html');
-});
 
 app.get('/obtener-marcas', async (req, res) => {
  
@@ -93,6 +90,25 @@ app.get('/obtener-marcas', async (req, res) => {
     console.error('Error al obtener las marcas:', error.message);
     res.status(500).json({ error: 'Error al obtener las marcas' });
   }
+});
+
+
+
+// Configurar EJS como el motor de plantillas
+app.set('view engine', 'ejs');
+
+// Configurar la carpeta "views" para los archivos EJS
+app.set('views', path.join(__dirname, 'views'));
+
+// Mantener recursos estáticos en la carpeta "public"
+app.use(express.static('public'));
+
+// Configurar CORS
+app.use(cors());
+
+// Rutas
+app.get('/', (req, res) => {
+  res.render('index'); // Renderizar el archivo index.ejs
 });
 
 app.get('/obtener-grupos/:brandId', async (req, res) => {
