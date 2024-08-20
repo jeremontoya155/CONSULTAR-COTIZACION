@@ -109,34 +109,25 @@ function consultarTodasLasMarcas() {
   
       console.log('Precios obtenidos:', data.precios);
   
-      const preciosOptions = data.precios.map(precio => ({
-        text: `$${precio.price}`,
-        year: precio.year,
-      }));
+      // Llenar la tabla en el modal
+      const tablaPrecios = document.getElementById('tablaPrecios').getElementsByTagName('tbody')[0];
+      tablaPrecios.innerHTML = ''; // Limpiar contenido previo
   
-      const { value: selectedPrice } = await Swal.fire({
-        title: 'Selecciona un precio para ver el año',
-        input: 'select',
-        inputOptions: preciosOptions.reduce((acc, precio) => {
-          if (!acc[precio.year]) {
-            acc[precio.year] = [];
-          }
-          acc[precio.year].push(`${precio.text}`);
-          return acc;
-        }, {}),
-        inputPlaceholder: 'Seleccione un precio',
+      data.precios.forEach(precio => {
+        const row = tablaPrecios.insertRow();
+        row.insertCell(0).textContent = precio.year;
+        row.insertCell(1).textContent = `$${precio.price.toLocaleString()}`;
       });
   
-      if (selectedPrice) {
-        const selectedYear = data.precios.find(precio => precio.price === selectedPrice).year;
-        Swal.fire({
-          title: `Año para el precio $${selectedPrice}`,
-          text: `El año es: ${selectedYear}`,
-          icon: 'info',
-        });
-      }
+      // Mostrar el modal de Bootstrap
+      const modal = new bootstrap.Modal(document.getElementById('preciosModal'));
+      modal.show();
+  
     } catch (error) {
-      console.error('Error al cargar los precios:', error);
+      console.error('Error al cargar los precios:', error.message);
+  
+      // Mostrar un mensaje de error básico
+      alert('No tenemos disponible actualmente precios para este modelo.');
     }
   }
   
@@ -196,30 +187,31 @@ function consultarTodasLasMarcas() {
   
       const data = await response.json();
   
-      if (!data || !data.hasOwnProperty('list_price')) {
-        Swal.fire({
-          title: 'No hay precios',
-          text: 'No hay precios actualmente para el modelo 0km. Consulte nuevamente.',
-          icon: 'warning'
-        });
+      if (!data || !data.precios || data.precios.length === 0) {
+        // Si no hay precios disponibles, mostrar un mensaje usando un alert simple de JavaScript
+        alert('No hay precios actualmente para el modelo 0km. Consulte nuevamente.');
         return;
       }
   
-      const listPrice = data.list_price;
+      // Llenar la tabla en el modal
+      const tablaPrecios = document.getElementById('tablaPrecios').getElementsByTagName('tbody')[0];
+      tablaPrecios.innerHTML = ''; // Limpiar contenido previo
   
-      Swal.fire({
-        title: 'Precio actual',
-        text: `El precio es: ${listPrice}`,
-        icon: 'success'
+      data.precios.forEach(precio => {
+        const row = tablaPrecios.insertRow();
+        row.insertCell(0).textContent = precio.year;
+        row.insertCell(1).textContent = `$${precio.price.toLocaleString()}`;
       });
+  
+      // Mostrar el modal de Bootstrap
+      const modal = new bootstrap.Modal(document.getElementById('preciosModal'));
+      modal.show();
+  
     } catch (error) {
-      console.error('Error al cargar el list_price:', error.message);
+      console.error('Error al cargar los precios:', error.message);
   
-      Swal.fire({
-        title: 'Error',
-        text: 'No tenemos disponible actualmente precios para este modelo en 0km.',
-        icon: 'error'
-      });
+      // Mostrar un mensaje de error básico
+      alert('No tenemos disponible actualmente precios para este modelo en 0km.');
     }
   }
   
@@ -239,4 +231,3 @@ function consultarTodasLasMarcas() {
       }
     }
   }
-  
