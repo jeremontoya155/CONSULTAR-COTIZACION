@@ -1,113 +1,85 @@
-
-    
 body {
-background-color: rgba(68, 58, 58, 0.512); /* Fondo naranja muy transparente */
-font-family: Arial, sans-serif;
-display: flex;
-justify-content: center;
-align-items: center;
-height: 100vh;
-margin: 0;
-scrollbar-width: thin;
-  scrollbar-color: transparent transparent; /* Define el color de fondo de la barra de desplazamiento y el color del scroll */
-
-}
-
-
-.logoImg {
-width: 3rem; /* Ajusta el tamaño según tus preferencias */
-height: auto; /* Mantén la proporción original de la imagen */
-margin-right: 10px; /* Ajusta el margen según tus preferencias */
-}
-
-.logoPrincipal {
-width: 15rem; /* Ajusta el tamaño según tus preferencias */
-height: auto; /* Mantén la proporción original de la imagen */
-margin-right: 10px; /* Ajusta el margen según tus preferencias */
-margin-top: 2em;
-padding-top:0.7em ;
-}
-/*Corregimos valores*/
-.container {
-max-height: 80vh; /* Cambié el porcentaje a viewport height (vh) */
-  overflow-y: auto; /* Añadí el scroll vertical si es necesario */
-  scroll-behavior: auto;
-  max-width: 800px;
-  width: 100%;
-  padding: 20px;
-  box-sizing: border-box;
-  margin-bottom: 2em;
-  scrollbar-width: thin;
-  scrollbar-color: transparent transparent; /* Define el color de fondo de la barra de desplazamiento y el color del scroll */
-
-}
-
-h1 {
-font-size: 3em;
-text-align: center;
-font: bold;
-}
-
-label,
-button {
-display: block;
-margin-bottom: 10px;
-}
-
-select{
-margin-bottom: 1em;
-}
-
-select,
-button {
-font-size: 16px;
-padding: 8px;
-border: 1px solid #ccc;
-border-radius: 4px;
-width: 100%;
-box-sizing: border-box;
-}
-
-/*Dejamos blanco el background*/
-
-table {
-width: 100%;
-border-collapse: collapse;
-margin-top: 20px;
-background-color: white;
-}
-
-th,
-td {
-padding: 12px;
-text-align: left;
-border: 1px solid #ddd;
-}
-
-th {
-background-color: #f2f2f2;
-}
-
-button {
-background-color: #ec6c1c;
-color: white;
-cursor: pointer;
-}
-.btn0km {
-background-color: #858b83;
-color: black;
-cursor: pointer;
-}
-
-button:hover {
-background-color: #f03810;
-}
-.btn0km:hover {
-background-color: rgb(51, 56, 51);
-}
-
-
-.centrar{
-text-align: center;
-}
-
+    background-color: rgba(68, 58, 58, 0.512);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding-top: 5em; /* Espacio superior para evitar solapamiento con el navbar */
+  }
+  
+  .logoImg {
+    width: 3rem;
+    height: auto;
+    margin-right: 10px;
+  }
+  
+  .logoPrincipal {
+    width: 15rem;
+    height: auto;
+    margin-right: 10px;
+    margin-top: 2em;
+  }
+  
+  .container {
+    max-width: 800px;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-bottom: 2em;
+  }
+  
+  h1 {
+    font-size: 3em;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  select, button, input {
+    font-size: 16px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 1em;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: white;
+  }
+  
+  th, td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  button {
+    background-color: #ec6c1c;
+    color: white;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #f03810;
+  }
+  
+  .btn0km {
+    background-color: #858b83;
+    color: black;
+    cursor: pointer;
+  }
+  
+  .btn0km:hover {
+    background-color: rgb(51, 56, 51);
+  }
+  
+  .centrar {
+    text-align: center;
+  }
+  
