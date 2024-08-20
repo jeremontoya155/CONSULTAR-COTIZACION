@@ -12,42 +12,40 @@
 
   <header class="">
     <nav class="navbar navbar-expand-lg" style="width: 100%; position: fixed; top: 0; background-color: #343a40;">
-      <div class="container-fluid">
+      <div class="contenedorNav">
         <a class="navbar-brand" href="#"><img src="img/logo.png" alt="Logo" class="logoImg"></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
-        </div>
       </div>
     </nav>
   </header>
 
-  <div class="container ">
-    <div class="row">
-      <div class="col text-center">
+  <div class="container">
+    <div class="contenedorPrincipal">
+      <div class="titulo">
+        <h1 class="cotizadorTitle">COTIZADOR USADOS</h1>
         <img src="img/logo.png" alt="" class="logoPrincipal">
-        <h1>COTIZADOR USADOS</h1>
-        <button class="btn btn-primary my-3" onclick="consultarTodasLasMarcas()">Consultar Todas las Marcas</button>
-
-        <div class="mb-3">
-          <label for="brandDropdown" class="form-label">Seleccione una marca</label>
-          <select class="form-select" id="brandDropdown" onchange="cambiarMarca()">
+        <!-- <button class="btn btn-primary my-3" onclick="consultarTodasLasMarcas()">Consultar Todas las Marcas</button> -->
+      </div>
+      <div class="contenedorDesplegables">
+        <div class="filtros">
+          <!-- <label for="brandDropdown" class="form-label">Seleccione una marca</label> -->
+          <select class="form-select" id="brandDropdown" onchange="cambiarMarca()" onfocus="consultarTodasLasMarcas()">
             <option value="">Seleccione una marca</option>
           </select>
         </div>
-
-        <div class="mb-3">
-          <label for="groupDropdown" class="form-label">Seleccione un modelo</label>
-          <select class="form-select" id="groupDropdown"></select>
-        </div>
-
-        <div class="d-grid gap-2">
-          <button class="btn btn-success" onclick="buscarModelosUsados()"><strong>Buscar Modelos</strong></button>
-          <button class="btn btn-secondary" onclick="buscarModelos()"><strong>Buscar Modelos 0KM</strong></button>
+  
+        <div class="filtros">
+          <!-- <label for="groupDropdown" class="form-label">Seleccione un modelo</label> -->
+          <select class="form-select" id="groupDropdown">
+            <option value="">Seleccione un grupo</option>
+          </select>
         </div>
       </div>
+
+      <div class="contenedorBotones">
+        <button class="btn btn-success" onclick="buscarModelosUsados()"><strong>Buscar Modelos</strong></button>
+        <button class="btn btn-secondary" onclick="buscarModelos()"><strong>Buscar Modelos 0KM</strong></button>
+      </div>
+
     </div>
 
     <div class="row mt-5">
@@ -103,5 +101,10 @@
   <script src="js/main.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
+  <!-- <script>
+    window.addEventListener('load', () => {
+            setTimeout(consultarTodasLasMarcas, 1000);
+        });
+  </script> -->
 </body>
 </html>
