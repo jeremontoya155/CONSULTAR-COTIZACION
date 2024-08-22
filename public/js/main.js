@@ -208,6 +208,22 @@ async function verPrecios(codia) {
   }
 }
 
+function filtrarDropdown(dropdownId, searchInputId) {
+  const searchInput = document.getElementById(searchInputId).value.toLowerCase();
+  const dropdown = document.getElementById(dropdownId);
+  const options = dropdown.getElementsByTagName('option');
+
+  for (let i = 0; i < options.length; i++) {
+    const optionText = options[i].textContent.toLowerCase();
+    if (optionText.includes(searchInput)) {
+      options[i].style.display = '';
+    } else {
+      options[i].style.display = 'none';
+    }
+  }
+}
+
+
 function filtrarModelos() {
   const searchInput = document.getElementById('searchModel').value.toLowerCase();
   const table = document.getElementById('modelos-table');
